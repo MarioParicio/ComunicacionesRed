@@ -10,6 +10,7 @@ public class ClienteHilo extends Thread {
 
     private DataInputStream in;
     private DataOutputStream out;
+    private Scanner sc = new Scanner(System.in);
 
     public static void limpiarConsola() {
         System.out.print("\033[H\033[2J");
@@ -62,17 +63,20 @@ public class ClienteHilo extends Thread {
                     case 2:
 
                         // Obtener listado de ficheros en directorio de trabajo
-                        File directorio = new File("D:\\Users\\dam2\\Desktop\\Interfaces\\primeraEvaluacion_Interfaces\\ComunicacionesRed");
-                        File[] ficheros = directorio.listFiles();
-                        String listadoFicheros = "";
-                        for (File fichero : ficheros) {
-                            listadoFicheros += fichero.getName() + "\n";
-                        }
-                        // Enviar listado de ficheros al cliente
-                        out.writeUTF(listadoFicheros);
+
+                        mensaje = in.readUTF();
+                        System.out.println(mensaje);
+                        sn.nextLine();
                         break;
                     case 3:
 
+                        System.out.println("Introduce el nombre del fichero a mostrar: ");
+                        String nombreFichero = sc.nextLine();
+                        out.writeUTF(nombreFichero);
+                        // Recibo y muestro el mensaje
+                        mensaje = in.readUTF();
+                        System.out.println(mensaje);
+                        sn.nextLine();
                         break;
                     case 4:
 

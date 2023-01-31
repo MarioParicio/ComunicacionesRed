@@ -7,6 +7,7 @@ public class ServidorHilo extends Thread {
     private DataInputStream in;
     private DataOutputStream out;
     private String nombreCliente;
+    private static String ruta = "D:\\Users\\dam2\\Desktop\\asfa";
 
     public ServidorHilo(DataInputStream in, DataOutputStream out, String nombreCliente) {
         this.in = in;
@@ -37,14 +38,18 @@ public class ServidorHilo extends Thread {
 
                     case 2:
                         // Obtener listado de ficheros en directorio de trabajo
-                        File directorio = new File("D:\\Users\\dam2\\Desktop\\Interfaces\\primeraEvaluacion_Interfaces");
+                        System.out.println("Entrando en el case 2");
+                        File directorio = new File(ruta);
                         File[] ficheros = directorio.listFiles();
                         String listadoFicheros = "";
                         for (File fichero : ficheros) {
                             listadoFicheros += fichero.getName() + "\n";
                         }
                         // Enviar listado de ficheros al cliente
+
+
                         out.writeUTF(listadoFicheros);
+
                         break;
 
 
@@ -52,8 +57,9 @@ public class ServidorHilo extends Thread {
 
                         // Recibir nombre del fichero solicitado por el cliente
                         String nombreFichero = in.readUTF();
+                        System.out.println("Nombre del fichero solicitado: " + nombreFichero);
                         // Abrir fichero y leer contenido
-                        File ficheroSolicitado = new File("directorioDeTrabajo" + File.separator + nombreFichero);
+                        File ficheroSolicitado = new File(ruta + File.separator + nombreFichero);
                         String contenidoFichero = "";
                         try (BufferedReader br = new BufferedReader(new FileReader(ficheroSolicitado))) {
                             String linea;
@@ -64,7 +70,12 @@ public class ServidorHilo extends Thread {
                             Logger.getLogger(ServidorHilo.class.getName()).log(Level.SEVERE, null, ex);
                         }
                         // Enviar contenido del fichero al cliente
-                        out.writeUTF(contenidoFichero);
+
+                        if (contenidoFichero.equals("")) {
+                            out.writeUTF("El fichero solicitado no existe");
+                        } else {
+                            out.writeUTF(contenidoFichero);
+                        }
                         break;
 
 
